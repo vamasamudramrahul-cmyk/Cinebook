@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}CineBook - Home{% endblock %}
+
+{% block content %}
+    <section class="hero">
+        <h1>CineBook</h1>
+        <p>A simple demo movie booking application. Browse sample movies, pick a showtime, choose your seats,
+           and complete a simulated booking &mdash; all built to help you learn Flask + SQLite.</p>
+        <a href="{{ url_for('movies_list') }}" class="btn btn-primary">Browse All Movies</a>
+    </section>
+
+    <section>
+        <h2>Now Showing</h2>
+        <div class="movie-grid">
+            {% for movie in movies %}
+                <a href="{{ url_for('movie_details', movie_id=movie['id']) }}" class="movie-card">
+                    <div class="poster-placeholder" style="background-color: {{ movie['poster_color'] }};">
+                        {{ movie['title'][:1] }}
+                    </div>
+                    <div class="movie-card-body">
+                        <h3>{{ movie['title'] }}</h3>
+                        <p class="movie-meta">{{ movie['genre'] }} &middot; {{ movie['language'] }}</p>
+                        <p class="movie-meta">{{ movie['duration'] }} min &middot; {{ movie['rating'] }}</p>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

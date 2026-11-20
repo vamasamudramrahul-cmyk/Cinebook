@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Booking Confirmed - CineBook{% endblock %}
+
+{% block content %}
+    <div class="confirmation-box">
+        <h1>Booking Confirmed</h1>
+        <p class="confirmation-sub">This is a simulated booking for demonstration purposes only. No real payment was processed.</p>
+
+        <table class="confirmation-table">
+            <tr><th>Booking ID</th><td>#{{ booking['id'] }}</td></tr>
+            <tr><th>Name</th><td>{{ booking['customer_name'] }}</td></tr>
+            <tr><th>Movie</th><td>{{ booking['movie_title'] }}</td></tr>
+            <tr><th>Theatre</th><td>{{ booking['theatre_name'] }}</td></tr>
+            <tr><th>Date</th><td>{{ booking['show_date'] }}</td></tr>
+            <tr><th>Time</th><td>{{ booking['show_time'] }}</td></tr>
+            <tr><th>Seats</th><td>{{ seat_list|join(', ') }}</td></tr>
+            <tr><th>Number of Seats</th><td>{{ booking['num_seats'] }}</td></tr>
+            <tr><th>Total Amount</th><td>{{ "%.2f"|format(booking['total_amount']) }}</td></tr>
+            <tr><th>Booked At</th><td>{{ booking['created_at'] }}</td></tr>
+        </table>
+
+        <a href="{{ url_for('movies_list') }}" class="btn btn-primary">Book Another Movie</a>
+    </div>
+{% endblock %}

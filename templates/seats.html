@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Select Seats - CineBook{% endblock %}
+
+{% block content %}
+    <a href="{{ url_for('movie_details', movie_id=show['movie_id']) }}" class="back-link">&larr; Back to {{ show['movie_title'] }}</a>
+
+    <h1>{{ show['movie_title'] }}</h1>
+    <p class="movie-meta">
+        {{ show['theatre_name'] }} &middot; {{ show['show_date'] }} at {{ show['show_time'] }}
+        &middot; Price: {{ "%.2f"|format(show['price']) }} per seat
+    </p>
+
+    <div class="screen-label">SCREEN THIS WAY</div>
+    <div class="screen-bar"></div>
+
+    <form method="POST" action="{{ url_for('create_booking', show_id=show['id']) }}" id="booking-form">
+
+        <div class="seat-map">
+            {% for row_letter, seats in seat_rows.items() %}
+                <div class="seat-row">
+                    <span class="row-label">{{ row_letter }}</span>
+                    {% for seat in seats %}
+                        {% if seat['is_booked'] %}
+                            <span class="seat seat-booked" title="Already booked">{{ seat['seat_label'] }}</span>
+                        {% else %}
+                            <label class="seat seat-available">
+                                <input type="checkbox"
+                                       name="seat_ids"
+                                       value="{{ seat['id'] }}"
+                                       data-label="{{ seat['seat_label'] }}"
+                                       class="seat-checkbox">
+                                {{ seat['seat_label'] }}
+                            </label>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="seat-legend">
+            <span><span class="legend-box seat-available"></span> Available</span>
+            <span><span class="legend-box seat-selected"></span> Selected</span>
+            <span><span class="legend-box seat-booked"></span> Booked</span>
+        </div>
+
+        <div class="booking-summary">
+            <p>Selected seats: <span id="selected-seats-text">None</span></p>
+            <p>Total seats: <span id="selected-seats-count">0</span></p>
+            <p>Total amount: <span id="selected-seats-total">0.00</span></p>
+
+            <div class="form-group">
+                <label for="customer_name">Name for this booking</label>
+                <input type="text" id="customer_name" name="customer_name" required
+                       placeholder="Enter your name">
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="confirm-booking-btn" disabled>
+                Confirm Booking
+            </button>
+        </div>
+    </form>
+
+    <script>
+        // Seat price is passed from Flask/Jinja into JavaScript so the
+        // page can show a running total as the user clicks seats.
+        const SEAT_PRICE = {{ show['price'] }};
+    </script>
+{% endblock %}

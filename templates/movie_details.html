@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}{{ movie['title'] }} - CineBook{% endblock %}
+
+{% block content %}
+    <a href="{{ url_for('movies_list') }}" class="back-link">&larr; Back to movies</a>
+
+    <div class="movie-detail-header">
+        <div class="poster-placeholder poster-large" style="background-color: {{ movie['poster_color'] }};">
+            {{ movie['title'][:1] }}
+        </div>
+        <div>
+            <h1>{{ movie['title'] }}</h1>
+            <p class="movie-meta">{{ movie['genre'] }} &middot; {{ movie['language'] }}</p>
+            <p class="movie-meta">{{ movie['duration'] }} minutes &middot; Rating: {{ movie['rating'] }}</p>
+            <p class="movie-desc">{{ movie['description'] }}</p>
+        </div>
+    </div>
+
+    <section>
+        <h2>Available Shows</h2>
+
+        {% if shows|length == 0 %}
+            <p>No shows are currently scheduled for this movie.</p>
+        {% else %}
+            <div class="show-list">
+                {% for show in shows %}
+                    <div class="show-card">
+                        <div>
+                            <strong>{{ show['show_date'] }}</strong> at <strong>{{ show['show_time'] }}</strong>
+                            <p class="movie-meta">{{ show['theatre_name'] }} &middot; {{ show['theatre_location'] }}</p>
+                            <p class="movie-meta">
+                                {{ show['seats_available'] }} seat(s) available &middot;
+                                Price: {{ "%.2f"|format(show['price']) }} per seat
+                            </p>
+                        </div>
+                        {% if show['seats_available'] > 0 %}
+                            <a href="{{ url_for('select_seats', show_id=show['id']) }}" class="btn btn-primary">
+                                Select Seats
+                            </a>
+                        {% else %}
+                            <span class="btn btn-disabled">Sold Out</span>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}

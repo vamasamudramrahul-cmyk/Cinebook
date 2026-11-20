@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}CineBook - Movies{% endblock %}
+
+{% block content %}
+    <h1>All Movies</h1>
+
+    <div class="movie-grid">
+        {% for movie in movies %}
+            <a href="{{ url_for('movie_details', movie_id=movie['id']) }}" class="movie-card">
+                <div class="poster-placeholder" style="background-color: {{ movie['poster_color'] }};">
+                    {{ movie['title'][:1] }}
+                </div>
+                <div class="movie-card-body">
+                    <h3>{{ movie['title'] }}</h3>
+                    <p class="movie-meta">{{ movie['genre'] }} &middot; {{ movie['language'] }}</p>
+                    <p class="movie-meta">{{ movie['duration'] }} min &middot; {{ movie['rating'] }}</p>
+                    <p class="movie-desc">{{ movie['description'] }}</p>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}
